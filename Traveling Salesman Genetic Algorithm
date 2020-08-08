@@ -1,0 +1,115 @@
+# hyperperameters:
+# pair 1st and 2nd, and 1st and 3rd in fitness, random crossover, swap mutation in 5% of of cases, uses ordered crossover (2 items in sequence moved from 1st parent
+# and remaining filled from 2nd parent in the same order they appear in the 2nd parent, and switch for the other parent)
+
+import random
+
+Number_of_Cycles=1000
+
+# set distance
+distance = {'ab': 9, 'ba': 9, 'ad': 7, 'da': 7, 'de': 8, 'ed': 8, 'be': 10, 'eb': 10, 'ac': 6, 'ca': 6, 'dc': 5,
+            'cd': 5, 'bc': 3, 'cb': 3, 'ce': 4, 'ec': 4,'ae': 1000, 'ea': 1000, 'db': 1000, 'bd': 1000}
+
+# initialize
+CRElite = ''
+CR1 = 'bcde'
+CR2 = 'bedc'
+CR3 = 'cbed'
+CR4 = 'ebdc'
+
+CR1Evaluate = 0
+CR2Evaluate = 0
+CR3Evaluate = 0
+CR4Evaluate = 0
+
+CR1Chance = 0
+CR2Chance = 0
+CR3Chance = 0
+CR4Chance = 0
+
+Top_3_Evaluations = []
+Crossover = 0
+
+while Number_of_Cycles>0:
+    Top_3_Evaluations=[]
+    Evaluate_Order=[]
+    # Function result of potential solutions
+    CR1Evaluate = distance['a' + CR1[:1]] + distance[CR1[:2]] + distance[CR1[1:3]] + distance[CR1[2:4]] + distance[CR1[3:4] + "a"]
+    CR2Evaluate = distance['a' + CR2[:1]] + distance[CR2[:2]] + distance[CR2[1:3]] + distance[CR2[2:4]] + distance[CR2[3:4] + "a"]
+    CR3Evaluate = distance['a' + CR3[:1]] + distance[CR3[:2]] + distance[CR3[1:3]] + distance[CR3[2:4]] + distance[CR3[3:4] + "a"]
+    CR4Evaluate = distance['a' + CR4[:1]] + distance[CR4[:2]] + distance[CR4[1:3]] + distance[CR4[2:4]] + distance[CR4[3:4] + "a"]
+
+    # Create and sort a dictionary with evaluated functions
+    Evaluate_Order = {"CR1": CR1Evaluate, "CR2": CR2Evaluate, "CR3": CR3Evaluate, "CR4": CR4Evaluate}
+    Evaluate_Order_Ordered = sorted(Evaluate_Order.items(), key=lambda x: x[1])
+    for i in Evaluate_Order_Ordered:
+        Top_3_Evaluations.append(i[0])
+
+    # Set CRElite to 1st item in Top_3_Evaluations
+    CR_Dict = {"CR1": CR1, "CR2": CR2, "CR3": CR3, "CR4": CR4}
+    CRElite = CR_Dict[Top_3_Evaluations[0]]
+
+
+    # print("CRElite is",CRElite)
+    print("Ordered list is", Top_3_Evaluations)
+    print("Evaluated order is",Evaluate_Order)
+
+
+# Perform crossover
+    # Assign crossover position
+    Crossover = random.randint(0,2)
+
+    # Crossover 1st and 2nd
+    if Crossover==0:
+        CR1 = CR_Dict[Top_3_Evaluations[1]][:2] + CR_Dict[Top_3_Evaluations[0]].replace(CR_Dict[Top_3_Evaluations[1]][0],"").replace(CR_Dict[Top_3_Evaluations[1]][1],"")
+        CR2 = CR_Dict[Top_3_Evaluations[0]][:2] + CR_Dict[Top_3_Evaluations[1]].replace(CR_Dict[Top_3_Evaluations[0]][0],"").replace(CR_Dict[Top_3_Evaluations[0]][1],"")
+        print(CR1)
+        print(CR2)
+    elif Crossover==1:
+        CR1 = CR_Dict[Top_3_Evaluations[0]].replace(CR_Dict[Top_3_Evaluations[1]][1],"").replace(CR_Dict[Top_3_Evaluations[1]][2],"")[0] + CR_Dict[Top_3_Evaluations[1]][1:3] + CR_Dict[Top_3_Evaluations[0]].replace(CR_Dict[Top_3_Evaluations[1]][1],"").replace(CR_Dict[Top_3_Evaluations[1]][2],"")[1]
+        CR2 = CR_Dict[Top_3_Evaluations[1]].replace(CR_Dict[Top_3_Evaluations[0]][1],"").replace(CR_Dict[Top_3_Evaluations[0]][2],"")[0] + CR_Dict[Top_3_Evaluations[0]][1:3] + CR_Dict[Top_3_Evaluations[1]].replace(CR_Dict[Top_3_Evaluations[0]][1],"").replace(CR_Dict[Top_3_Evaluations[0]][2],"")[1]
+        print(CR1)
+        print(CR2)
+    else:
+        CR1 = CR_Dict[Top_3_Evaluations[0]][:2] + CR_Dict[Top_3_Evaluations[1]].replace(CR_Dict[Top_3_Evaluations[0]][0],"").replace(CR_Dict[Top_3_Evaluations[0]][1],"")
+        CR2 = CR_Dict[Top_3_Evaluations[1]][:2] + CR_Dict[Top_3_Evaluations[0]].replace(CR_Dict[Top_3_Evaluations[1]][0],"").replace(CR_Dict[Top_3_Evaluations[1]][1],"")
+        print(CR1)
+        print(CR2)
+
+    # Crossover 1st and 3rd
+    if Crossover==0:
+        CR3 = CR_Dict[Top_3_Evaluations[2]][:2] + CR_Dict[Top_3_Evaluations[0]].replace(CR_Dict[Top_3_Evaluations[2]][0],"").replace(CR_Dict[Top_3_Evaluations[2]][1],"")
+        CR4 = CRElite
+        print(CR1)
+        print(CR2)
+    elif Crossover==1:
+        CR3 = CR_Dict[Top_3_Evaluations[0]].replace(CR_Dict[Top_3_Evaluations[2]][1],"").replace(CR_Dict[Top_3_Evaluations[2]][2],"")[0] + CR_Dict[Top_3_Evaluations[2]][1:3] + CR_Dict[Top_3_Evaluations[0]].replace(CR_Dict[Top_3_Evaluations[2]][1],"").replace(CR_Dict[Top_3_Evaluations[2]][2],"")[1]
+        CR4 = CRElite
+        print(CR1)
+        print(CR2)
+    else:
+        CR3 = CR_Dict[Top_3_Evaluations[0]][:2] + CR_Dict[Top_3_Evaluations[2]].replace(CR_Dict[Top_3_Evaluations[0]][0],"").replace(CR_Dict[Top_3_Evaluations[0]][1],"")
+        CR4 = CRElite
+        print(CR1)
+        print(CR2)
+    print("CRElite is", CRElite, "whose value is",
+          distance['a' + CRElite[:1]] + distance[CRElite[:2]] + distance[CRElite[1:3]] + distance[CRElite[2:4]] +
+          distance[CRElite[3:4] + "a"])
+
+#Add Mutation
+    def swap(a, b, c):
+        list2 = list(a)
+        list2[b], list2[c] = list2[c], list2[b]
+        return ''.join(list2)
+    if random.randint(0,99)>94:
+        Switch_Position1=random.randint(0,3)
+        print("Switch_Position1",Switch_Position1)
+        Switch_Position2=random.randint(0, 3)
+        print("Switch_Position2",Switch_Position2)
+        print("CR1 was",CR1)
+        CR1=swap(CR1, Switch_Position1, Switch_Position2)
+        print("CR1 is", CR1)
+        CR2=swap(CR2, Switch_Position1, Switch_Position2)
+        CR3=swap(CR2, Switch_Position1, Switch_Position2)
+
+    Number_of_Cycles = Number_of_Cycles - 1
