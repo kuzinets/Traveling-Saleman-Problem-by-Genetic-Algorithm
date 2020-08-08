@@ -6,11 +6,12 @@ import random
 
 Number_of_Cycles=1000
 
-# set distance
+# set distance.  For paths between two cities, between which another city must be passed, is given a value of 1000, because only want to
+# travel one city at a time.
 distance = {'ab': 9, 'ba': 9, 'ad': 7, 'da': 7, 'de': 8, 'ed': 8, 'be': 10, 'eb': 10, 'ac': 6, 'ca': 6, 'dc': 5,
             'cd': 5, 'bc': 3, 'cb': 3, 'ce': 4, 'ec': 4,'ae': 1000, 'ea': 1000, 'db': 1000, 'bd': 1000}
 
-# initialize
+# set starting values
 CRElite = ''
 CR1 = 'bcde'
 CR2 = 'bedc'
@@ -50,7 +51,6 @@ while Number_of_Cycles>0:
     CRElite = CR_Dict[Top_3_Evaluations[0]]
 
 
-    # print("CRElite is",CRElite)
     print("Ordered list is", Top_3_Evaluations)
     print("Evaluated order is",Evaluate_Order)
 
